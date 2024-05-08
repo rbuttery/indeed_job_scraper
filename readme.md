@@ -28,14 +28,14 @@ This Python project automates the process of scraping job listings from Indeed u
 
 ```bash
 # Run the scraper for Data Analyst positions, in Remote location, in the USA, sorted by date, scraping 5 pages
-python indeed_scraper.py --keywords "Data Analyst" --location "Remote" --country USA --sort_by date --max_pages 5
+python main.py --keywords "Data Analyst" --location "Remote" --country USA --sort_by date --max_pages 5
 
 # Run the scraper without searching for new jobs, just updating job descriptions for existing entries
-python indeed_scraper.py --dont_search
+python main.py --dont_search
 
 # Run the scraper with a different keyword and location, only scraping 3 pages, without updating job descriptions
-python indeed_scraper.py --keywords "Software Developer" --location "New York" --country USA --sort_by relevance --max_pages 3 --dont_update_job_descriptions
+python main.py --keywords "Software Developer" --location "New York" --country USA --sort_by relevance --max_pages 3 --dont_update_job_descriptions
 
 # Run the scraper for Canada in the city of Toronto, looking for Engineering positions, sorting by relevance
-python indeed_scraper.py --keywords "Engineering" --location "Toronto" --country CANADA --sort_by relevance --max_pages 2
+python main.py --keywords "Engineering" --location "Toronto" --country CANADA --sort_by relevance --max_pages 2
 ```
