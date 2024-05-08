@@ -21,7 +21,7 @@ This Python project automates the process of scraping job listings from Indeed u
 3. Set up a virtual environment (ON WINDOWS):
    ```bash
    python -m venv env
-   source env\Scripts\activate
+   env\Scripts\activate
    pip install -r requirements.txt
 
 ## Example Useage In Command Line Interface
