@@ -2,12 +2,6 @@
 
 This Python project automates the process of scraping job listings from Indeed using Selenium. The data is stored in a SQLite database and can be analyzed or visualized through Jupyter notebooks.
 
-<video controls>
-   <source src="demo/demo.mp4" type="video/mp4">
-   Your browser does not support the video tag.
-</video>
-
-
 ## Project Structure
 
 - `env/`: Virtual environment for project dependencies.
