@@ -1,3 +1,4 @@
+# Packages
 import logging
 import time
 import json
@@ -6,7 +7,7 @@ import pyautogui
 from markdownify import markdownify as md
 import re
 
-
+# Custom code 
 from database_tools import DatabaseTools
 from selenium_base import SeleniumScraper, Browsers
 
@@ -322,35 +323,38 @@ def main(max_pages=15, dont_search=False, dont_update_job_descriptions=False, **
         print('All job postings updated.')
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-    # Set the search parameters
-    KEYWORDS = 'Data Analyst'
-    LOCATION = 'Remote'
-    COUNTRY = IndeedScraper.Country.USA
-    SORT_BY = IndeedScraper.SortBy.DATE
+    # # Set the search parameters
+    # KEYWORDS = 'Data Analyst'
+    # LOCATION = 'Remote'
+    # COUNTRY = IndeedScraper.Country.USA
+    # SORT_BY = IndeedScraper.SortBy.DATE
 
-    # Construct the search parameters Object
-    search_params = {
-        'keywords': KEYWORDS,
-        'location': LOCATION,
-        'country': COUNTRY,
-        'sort_by': SORT_BY
-    }
+    # # Construct the search parameters Object
+    # search_params = {
+    #     'keywords': KEYWORDS,
+    #     'location': LOCATION,
+    #     'country': COUNTRY,
+    #     'sort_by': SORT_BY
+    # }
     
-    #####!temp bug fix - for then we need to run the two processes separately
-    # These options are nice to have for debugging and testing. 
-    dont_search = False
-    dont_update_job_descriptions = False
+    # #####!temp bug fix - for then we need to run the two processes separately
+    # # These options are nice to have for debugging and testing. 
+    # dont_search = False
+    # dont_update_job_descriptions = False
         
-    # Run the main function over max_pages=N, with the search parameters.
-    main(
-        max_pages=5, 
-        dont_search=dont_search, 
-        dont_update_job_descriptions=dont_update_job_descriptions,
-        **search_params
-    )
+    # # Run the main function over max_pages=N, with the search parameters.
+    # main(
+    #     max_pages=5, 
+    #     dont_search=dont_search, 
+    #     dont_update_job_descriptions=dont_update_job_descriptions,
+    #     **search_params
+    # )
     
-    #####!temp bug fix - run just the description update again as it missses some for some larger jobs. This is a browser issue.
-    main(max_pages=0, dont_search=dont_search, 
-         dont_update_job_descriptions=dont_update_job_descriptions, **search_params)
+    # #####!temp bug fix - run just the description update again as it missses some for some larger jobs. This is a browser issue.
+    # main(max_pages=0, dont_search=dont_search, 
+    #      dont_update_job_descriptions=dont_update_job_descriptions, **search_params)
+    
+    
+    
