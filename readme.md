@@ -23,7 +23,6 @@ This Python project automates the process of scraping job listings from Indeed u
    python -m venv env
    source env\Scripts\activate
    pip install -r requirements.txt
-   python indeed_scraper.py
 
 ## Example Useage In Command Line Interface
 
