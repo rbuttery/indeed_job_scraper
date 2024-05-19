@@ -53,7 +53,7 @@ class IndeedScraper(SeleniumScraper):
             region_code = 'com'
 
         # This is the base url for all queries
-        self.url = f"https://in.indeed.{region_code}/jobs?q={keywords}"
+        self.url = f"https://www.indeed.{region_code}/jobs?q={keywords}"
 
         # add location to the query
         if location is not None:
