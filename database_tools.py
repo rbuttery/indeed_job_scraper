@@ -2,7 +2,7 @@ import os
 import sqlite3
 import pandas as pd
 
-from logger_config import logger
+from logger_config import logger 
 # logger.basicConfig(filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.log'), level=format='%(asctime)s - %(levelname)s - %(message)s')
 
 
