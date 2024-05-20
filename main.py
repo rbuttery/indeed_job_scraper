@@ -1,5 +1,9 @@
 import argparse
+import logging
 from indeed_scraper import IndeedScraper, main  # Adjust this import based on your actual module structure.
+
+
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Scrape job listings from Indeed.")
@@ -13,6 +17,7 @@ def parse_args():
     return parser.parse_args()
 
 if __name__ == '__main__':
+
     args = parse_args()
 
     # Set the country and sort_by using the enumeration in IndeedScraper, adjusting as needed for your implementation.
