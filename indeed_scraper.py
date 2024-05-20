@@ -8,7 +8,7 @@ from markdownify import markdownify as md
 import re
 
 # Custom code 
-from database_tools import DatabaseTools
+from database_tools import DatabaseTools 
 from selenium_base import SeleniumScraper, Browsers
 
 
