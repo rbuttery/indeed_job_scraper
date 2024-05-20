@@ -2,8 +2,8 @@ import os
 import sqlite3
 import pandas as pd
 
-import logging
-logging.basicConfig(filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.log'), level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+from logger_config import logger
+# logger.basicConfig(filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.log'), level=format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 class DatabaseTools:
@@ -14,8 +14,8 @@ class DatabaseTools:
         self.ddl_path = os.path.join(self.current_directory, 'ddl.sql')
         self.ddl = None
         self.setup()
-        logging.log(logging.INFO, '-'*50)
-        logging.log(logging.INFO, f'DatabaseTools initialized with database: {self.database_path}')
+        logger.info('-'*50)
+        logger.info(f'DatabaseTools initialized with database: {self.database_path}')
         
     def connect(self):
         self.conn = sqlite3.connect(self.database_path)
@@ -23,31 +23,31 @@ class DatabaseTools:
     
     def setup(self, force_update=True):
         def create_new():
-            logging.info(f'Reading DDL file: {self.ddl_path}')
+            logger.info(f'Reading DDL file: {self.ddl_path}')
             try:
                 with open(self.ddl_path, 'r') as f:
                     self.ddl = f.read()
             except FileNotFoundError:
-                logging.error(f'DDL file not found: {self.ddl_path}')
+                logger.error(f'DDL file not found: {self.ddl_path}')
                 exit()
 
-            logging.info(f'Setting up database: {self.database_path}')
+            logger.info(f'Setting up database: {self.database_path}')
             try:
                 self.connect()
                 self.cursor.executescript(self.ddl) 
                 self.conn.commit()
             except sqlite3.Error as e:
-                logging.ERROR(f'Error setting up database: {e}')
+                logger.ERROR(f'Error setting up database: {e}')
                 exit()
         # First check if the database already exists.
         if force_update:
             create_new()
-            logging.info(f'Force update: Database created: {self.database_path}')
+            logger.info(f'Force update: Database created: {self.database_path}')
         elif os.path.exists(self.database_path):
-            logging.info(f'Database already exists: {self.database_path}')
+            logger.info(f'Database already exists: {self.database_path}')
         else:
             create_new()
-            logging.info(f'Database created: {self.database_path}')
+            logger.info(f'Database created: {self.database_path}')
     
     def run_sql(self, sql): 
         self.connect()
@@ -124,10 +124,11 @@ class DatabaseTools:
                 job_unique_id, 
                 job_title, 
                 job_link, 
-                session_id
+                session_id, 
+                job_company
                 )
-            VALUES (?, ?, ?, ?)
-        ''', (obj['job_unique_id'], obj['job_title'], obj['job_link'], obj['session_id']))
+            VALUES (?, ?, ?, ?, ?)
+        ''', (obj['job_unique_id'], obj['job_title'], obj['job_link'], obj['session_id'], obj['job_company']))
         self.conn.commit()
         
     def get_postings_by_session(self, session_id):

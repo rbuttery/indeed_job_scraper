@@ -1,5 +1,5 @@
 # Packages
-import logging
+from logger_config import logger
 import time
 import json
 from selenium.webdriver.common.by import By
@@ -47,7 +47,7 @@ class IndeedScraper(SeleniumScraper):
         if country is None:
             raise ValueError('Country is required.')
 
-        if country == self.Country.CANADA:
+        if country == self.Country.CANADA:                    ################################################
             region_code = 'ca'
         elif country == self.Country.USA:
             region_code = 'com'
@@ -89,7 +89,7 @@ class IndeedScraper(SeleniumScraper):
             elif page_number > 1:
                 new_page_num = (page_number - 1) * 10
             self.url = f"{self.url}&start={new_page_num}"
-        logging.log(logging.INFO, f'URL built: {self.url}')
+        logger.info(f'URL built: {self.url}')
         # return the url
         return self.url
 
@@ -109,19 +109,19 @@ class IndeedScraper(SeleniumScraper):
                     'options': options
                 }
                 menu_items.append(menu_item)
-        logging.log(logging.INFO, f'Filter items found: {menu_items}')
+        logger.info(f'Filter items found: {menu_items}'.encode('utf-8'))
         return menu_items
 
     def get_current_url(self):
-        logging.log(
-            logging.INFO, f'Getting current url: {self.driver.current_url}')
+        logger.info(
+            f'Getting current url: {self.driver.current_url}')
         return '&'.join(self.driver.current_url.split('&')[0:-2])
 
     """UI Manipulation Functions"""
 
     def close_popup(self):
         try:
-            logging.log(logging.INFO, 'Closing popup')
+            logger.info('Closing popup')
             self.driver.find_element(
                 by=By.CSS_SELECTOR, value='button[aria-label="close"]').click()
             time.sleep(1)
@@ -129,21 +129,21 @@ class IndeedScraper(SeleniumScraper):
             pass
 
     def click_next(self):
-        logging.log(logging.INFO, 'Clicking next page')
+        logger.info('Clicking next page')
         self.driver.find_element(
             by=By.CSS_SELECTOR, value='a[data-testid="pagination-page-next"]').click()
 
     def click_prev(self):
-        logging.log(logging.INFO, 'Clicking previous page')
+        logger.info('Clicking previous page')
         self.driver.find_element(
             by=By.CSS_SELECTOR, value='a[data-testid="pagination-page-prev"]').click()
 
     # !!!! TODO: This function doesnt work on all resolutions and browsers. Also it should minimize back. Full-screen indeed is bright.
     def requires_human_verification(self):
-        logging.log(logging.INFO, 'Checking for human verification')
+        logger.info('Checking for human verification')
         # works on 1080 * 1920 resolution, with firefox browser
         if 'Verify' in str(self.driver.page_source):
-            logging.log(logging.INFO, 'Human verification required')
+            logger.info('Human verification required')
             self.driver.fullscreen_window()
             time.sleep(2)
             where = {
@@ -219,12 +219,18 @@ class IndeedScraper(SeleniumScraper):
                         print('no job link')
                         job_link = None
 
+                    try:  # to get the company name
+                        job_company = job.find_element(By.CLASS_NAME, 'css-92r8pb').text
+                    except:
+                        job_company = None
+
                     # Build the job object
                     obj = {
                         'job_unique_id': job_unique_id,
                         'job_title': job_title,
                         'job_link': job_link,
-                        'session_id': self.session_id
+                        'session_id': self.session_id,
+                        'job_company': job_company
                     }
                     db = DatabaseTools()
                     db.update_job_postings(obj)
@@ -272,7 +278,7 @@ class IndeedScraper(SeleniumScraper):
 
     def html_to_markdown(self, description_html: str):
         md_text = md(description_html)
-        logging.log(logging.DEBUG, md_text)
+        logger.debug(md_text)
         return md_text
 
     def remove_links_from_markdown(self, markdown, replace_with: str = '<url removed>'):
@@ -322,6 +328,20 @@ def main(max_pages=15, dont_search=False, dont_update_job_descriptions=False, **
         scraper.close_browser()
         print('All job postings updated.')
 
+
+    print("Writing recentt search to csv!!")
+    df_final = db.sql_to_df("select * from job_postings where date(timestamp) = date('now')")
+    df_search_sessions = db.sql_to_df("select * from search_sessions")
+    df_recent_session_id = df_search_sessions['id'].tail(1).item()
+
+    term = df_search_sessions.loc[df_search_sessions['id'] == df_recent_session_id, 'terms'].item()
+    loc = df_search_sessions.loc[df_search_sessions['id'] == df_recent_session_id, 'location'].item()
+    # pages = df_search_sessions.loc[df_search_sessions['id'] == df_recent_session_id, 'n_pages'].item()
+
+    df_final = df_final.loc[df_final['session_id'] == df_recent_session_id]
+
+    df_final.to_csv(f'job_postings_india_{term}_{loc}_{df_recent_session_id}.csv')
+    print("writing complete")
 
 # if __name__ == '__main__':
 

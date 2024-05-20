@@ -90,7 +90,7 @@ class SeleniumScraper:
     
     def go_to_url(self, url):
         self.previous_url = self.current_url
-        self.driver.get(url)
+        self.driver.get(url)                             ####################################################
         self.current_url = url
     
     def close_browser(self):
